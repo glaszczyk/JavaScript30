@@ -13,10 +13,39 @@ const codes = {
 
 const keys = Array.from(document.getElementsByTagName('kbd'));
 
-const foo = (event) => console.log(codes[event.keyCode]);
+getParent = (node) => node.parentElement;
 
-keys.map(key => key.addEventListener('keydown', foo));
+getClassName = (node) => node.getAttribute('class');
 
-document.addEventListener('keydown', foo);
+addClassName = (node, currentClassName, className) => node.setAttribute('class', `${currentClassName} ${className}`);
+
+const checkKey = (event) => {
+    key = codes[event.keyCode] || null;
+    return key;
+}
+
+const getNode = (keys, key) => keys.filter(element => element.innerText === key)[0]
+
+const addHighlightOnInstrument = (key) => {
+    const node =  getNode(keys, key);
+    const parentNode = getParent(node);
+    const parentClass = getClassName(parentNode);
+    addClassName(parentNode, parentClass,'playing');
+};
+
+const removeHighlightOnInstrument = (key) => {
+    const node = getNode(keys, key);
+    const parentNode = getParent(node);
+    addClassName(parentNode, '','key');
+};
+
+document.addEventListener('keydown', (event) => {
+    checkKey(event);
+    addHighlightOnInstrument(key)
+});
+document.addEventListener('keyup', (event) => { 
+    checkKey(event);
+    removeHighlightOnInstrument(key)
+});
 
 console.log(keys);
