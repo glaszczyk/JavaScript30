@@ -1,51 +1,49 @@
 // Drumkit code
 const codes = {
-    '65': 'A', 
-    '83': 'S', 
-    '68': 'D', 
-    '70': 'F', 
-    '71': 'G', 
-    '72': 'H', 
-    '74': 'J', 
-    '75': 'K', 
-    '76': 'L' 
+    '65': 'A',
+    '83': 'S',
+    '68': 'D',
+    '70': 'F',
+    '71': 'G',
+    '72': 'H',
+    '74': 'J',
+    '75': 'K',
+    '76': 'L'
 }
 
-const keys = Array.from(document.getElementsByTagName('kbd'));
+const findAudio = (id) => document.querySelector(`audio[data-key="${id}"]`);
+const findScreenKey = (id) => document.querySelector(`div[data-key="${id}"]`);
 
-getParent = (node) => node.parentElement;
-
-getClassName = (node) => node.getAttribute('class');
-
-addClassName = (node, currentClassName, className) => node.setAttribute('class', `${currentClassName} ${className}`);
-
-const checkKey = (event) => {
-    key = codes[event.keyCode] || null;
-    return key;
-}
-
-const getNode = (keys, key) => keys.filter(element => element.innerText === key)[0]
+const getKeyCode = (event) => event.keyCode;
 
 const addHighlightOnInstrument = (key) => {
-    const node =  getNode(keys, key);
-    const parentNode = getParent(node);
-    const parentClass = getClassName(parentNode);
-    addClassName(parentNode, parentClass,'playing');
+    const button = findScreenKey(key);
+    button.classList.add('key--playing');
 };
 
 const removeHighlightOnInstrument = (key) => {
-    const node = getNode(keys, key);
-    const parentNode = getParent(node);
-    addClassName(parentNode, '','key');
+    const button = findScreenKey(key);
+    button.classList.remove('key--playing');
 };
 
+const playSound = (sound) => {
+    sound.pause();
+    sound.currentTime = 0;
+    sound.play();
+}
+
 document.addEventListener('keydown', (event) => {
-    checkKey(event);
-    addHighlightOnInstrument(key)
-});
-document.addEventListener('keyup', (event) => { 
-    checkKey(event);
-    removeHighlightOnInstrument(key)
+    const key = getKeyCode(event);
+    if (codes[key] !== undefined) {
+        addHighlightOnInstrument(key);
+    }
 });
 
-console.log(keys);
+document.addEventListener('keyup', (event) => {
+    const key = getKeyCode(event);
+    if (codes[key] !== undefined) {
+        const sound = findAudio(key);
+        playSound(sound);
+        removeHighlightOnInstrument(key);
+    }
+});
