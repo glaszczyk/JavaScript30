@@ -9,7 +9,7 @@
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="20" data-sizing="px">
 
     <label for="blur">Blur:</label>
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
@@ -27,8 +27,8 @@
     */
     :root {
         --spacing: 10px;
-        --blur: 0px;
-        --color: #ffc600;
+        --blur: 10px;
+        --base: #ffc600;
     }
 
     body {
@@ -41,7 +41,7 @@
     }
     
     .hl {
-        color: var(--color);
+        color: var(--base);
     }
 
     .controls {
@@ -53,11 +53,11 @@
     }
 
     img {
-        background-color: var(--color, #193549);
+        background-color: var(--base, #193549);
         filter: blur(var(--blur, 0));
         padding: var(--spacing, 0);
     }
-    
+
   </style>
 
   <script type="text/javascript" src="./script.js"></script>  
