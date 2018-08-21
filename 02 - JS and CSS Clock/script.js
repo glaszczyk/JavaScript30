@@ -17,11 +17,11 @@ function newDate() {
     };
 }
 
-calculateSecondsPosition = (value) => value * 6 + 90;
+calculateSecondsPosition = (value) => value.seconds * 6 + 90;
 
-calculateMinutesPosition = (value) => value / 10 + 90;
+calculateMinutesPosition = (value) => (value.minutes * 60 + value.seconds) / 10 + 90;
 
-calculateHoursPosition = (value) => value / 2 + 90;
+calculateHoursPosition = (value) => ((value.hours % 12) * 60 + value.minutes) / 2 + 90;
 
 const hoursHand = document.querySelector('.hour-hand');
 const minutesHand = document.querySelector('.min-hand');
@@ -29,9 +29,9 @@ const secondsHand = document.querySelector('.second-hand');
 
 function add() {
     const currentTime = newDate();
-    secondsHand.style.transform = 'rotate(' + calculateSecondsPosition(currentTime.seconds) + 'deg)';
-    minutesHand.style.transform = 'rotate(' + calculateMinutesPosition(currentTime.minutes * 60 + currentTime.seconds) + 'deg)';
-    hoursHand.style.transform = 'rotate(' + calculateHoursPosition((currentTime.hours % 12) * 60 + currentTime.minutes) + 'deg)';
+    secondsHand.style.transform = `rotate(${calculateSecondsPosition(currentTime)}deg)`;
+    minutesHand.style.transform = `rotate(${calculateMinutesPosition(currentTime)}deg)`;
+    hoursHand.style.transform = `rotate(${calculateHoursPosition(currentTime)}deg)`;
 }
 
 function tickTock() {
