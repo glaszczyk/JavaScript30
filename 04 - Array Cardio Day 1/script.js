@@ -23,24 +23,56 @@ const people = ['Beck, Glenn', 'Becker, Carl', 'Beckett, Samuel', 'Beddoes, Mick
 // Array.prototype.filter()
 // 1. Filter the list of inventors for those who were born in the 1500's
 
+const filteredInventors = inventors.filter(i => Math.floor(i.year / 100) === 15);
+console.log(filteredInventors);
+
 // Array.prototype.map()
 // 2. Give us an array of the inventors' first and last names
+const names = inventors.map(({ first, last }) => ({ first, last }));
+console.log(names);
 
 // Array.prototype.sort()
 // 3. Sort the inventors by birthdate, oldest to youngest
+const inventorsByBirthdate = inventors.sort((a, b) => a.year - b.year);
+console.table(inventorsByBirthdate);
 
 // Array.prototype.reduce()
 // 4. How many years did all the inventors live?
+const age = (person) => person.passed - person.year;
+const totalAge = inventors.reduce((total, i) => (total + age(i)), 0);
+console.log(totalAge);
 
 // 5. Sort the inventors by years lived
+const sorted = inventors.sort((a, b) => age(b) - age(a));
+console.log(sorted);
 
 // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
 // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+const links = Array.from(document.querySelectorAll('.mw-category a'));
+const filtered = links
+    .map(link => link.innerText)
+    .filter(name => name.includes('de'));
+console.log(filtered);
 
 // 7. sort Exercise
 // Sort the people alphabetically by last name
+ 
+const lastName = (person) => {
+    [last, first] = person.split(',')
+    return last.trim().toLowerCase();
+}
+const lastNames = people.sort((a, b) => lastName(a).localeCompare(lastName(b)));
+console.log(lastNames);
+
 
 // 8. Reduce Exercise
 // Sum up the instances of each of these
 const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
+const transportation = data.reduce(function (counted, item) {
+    if (!counted[item]) {
+        counted[item] = 0;
+    }
+    counted[item]++;
+    return counted;
+}, {});
+console.log(transportation);
