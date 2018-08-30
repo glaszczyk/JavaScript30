@@ -11,24 +11,32 @@ const fetchCities = async () => {
 }
 
 async function main() {
-    const currentList = document.querySelector('.suggestions');
-    const listParent = currentList.parentNode;
+    const oldCityList = document.querySelector('.suggestions');
+    const listParent = oldCityList.parentNode;
     
     console.info('Fetching cities…');
     
     const cities = await fetchCities();
+    
+    const prepareCities = listOfCities(cities);
+    
     const newCityList = createElement('ul', '');
     
-    cities.forEach( city => {
-        const li = createElement('li', city.city);
-        const span = createElement('span', city.population);
-        addElementTo(span, li);
-        addElementTo(li, newCityList);
-    });
+    addElementTo(prepareCities, newCityList);
     
     newCityList.classList.add('suggestions');
-    listParent.replaceChild(newCityList, currentList);
+    
+    listParent.replaceChild(newCityList, oldCityList);
 }
+
+listOfCities = (cities) => 
+    cities.reduce( (list, {city, population}) => {
+        const li = createElement('li', city);
+        const span = createElement('span', population);
+        addElementTo(span, li);
+        list.appendChild(li);
+        return list;
+    }, document.createElement('ul'));
 
 function createElement(tag, content) {
     const element = document.createElement(tag);
