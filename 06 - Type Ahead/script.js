@@ -11,7 +11,31 @@ const fetchCities = async () => {
 }
 
 async function main() {
-    console.log('Fetching cities…');
+    const currentList = document.querySelector('.suggestions');
+    const listParent = currentList.parentNode;
+    
+    console.info('Fetching cities…');
+    
     const cities = await fetchCities();
-    console.log(cities)
+    const newCityList = createElement('ul', '');
+    
+    cities.forEach( city => {
+        const li = createElement('li', city.city);
+        const span = createElement('span', city.population);
+        addElementTo(span, li);
+        addElementTo(li, newCityList);
+    });
+    
+    newCityList.classList.add('suggestions');
+    listParent.replaceChild(newCityList, currentList);
+}
+
+function createElement(tag, content) {
+    const element = document.createElement(tag);
+    element.innerHTML += content;
+    return element;
+}
+
+function addElementTo(element, target) {
+    return target.appendChild(element);
 }
