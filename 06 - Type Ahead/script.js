@@ -48,12 +48,10 @@ listOfCities = (cities) =>
         return list;
     }, document.createElement('ul'));
 
-function createElement(tag, content) {
+createElement = (tag, content) => {
     const element = document.createElement(tag);
     element.innerHTML += content;
     return element;
 }
 
-function addElementTo(element, target) {
-    return target.appendChild(element);
-}
+addElementTo = (element, target) => target.appendChild(element);
