@@ -11,21 +11,31 @@ const fetchCities = async () => {
 }
 
 async function main() {
-    const oldCityList = document.querySelector('.suggestions');
-    const listParent = oldCityList.parentNode;
-    
     console.info('Fetching cities…');
-    
     const cities = await fetchCities();
     
+    const searchInput = document.querySelector('.search');
+    
+    searchInput.addEventListener('keyup', (event) => searchFor(cities, event.target.value));
+}
+
+searchFor = (list, string) => {
+    const results = list.filter( ({city}) => city.toLowerCase().includes(string.toLowerCase()) );
+    displayResults(results);
+}
+
+displayResults = (cities) => {
     const prepareCities = listOfCities(cities);
-    
+
+    const oldCityList = document.querySelector('.suggestions');
+    const listParent = oldCityList.parentNode;
+
     const newCityList = createElement('ul', '');
-    
+
     addElementTo(prepareCities, newCityList);
-    
+
     newCityList.classList.add('suggestions');
-    
+
     listParent.replaceChild(newCityList, oldCityList);
 }
 
