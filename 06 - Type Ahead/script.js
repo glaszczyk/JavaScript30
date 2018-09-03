@@ -21,7 +21,14 @@ async function main() {
 
 searchFor = (list, string) => {
     const results = list.filter( ({city}) => city.toLowerCase().includes(string.toLowerCase()) );
-    displayResults(results);
+    const highlighted = results.map( city => {
+        const regexp = new RegExp(string, "i");
+        return {
+            ...city,
+            city: city.city.replace(regexp, `<mark class="hl">${string}</mark>`)
+        }
+    })
+    displayResults(highlighted);
 }
 
 displayResults = (cities) => {
@@ -41,9 +48,11 @@ displayResults = (cities) => {
 
 listOfCities = (cities) => 
     cities.reduce( (list, {city, population}) => {
-        const li = createElement('li', city);
-        const span = createElement('span', population);
-        addElementTo(span, li);
+        const spanCity = createElement('span', city);
+        const spanPopulation = createElement('span', population);
+        const li = createElement('li', '');
+        addElementTo(spanCity, li);
+        addElementTo(spanPopulation, li);
         list.appendChild(li);
         return list;
     }, document.createElement('ul'));
