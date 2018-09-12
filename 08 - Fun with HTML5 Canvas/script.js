@@ -5,6 +5,7 @@ function main() {
     let mouseDown = false;
     let cursor;
     let previousCursor;
+    let color = 0;
     let strokeWidth = {
         width: 30,
         mode: 'decrease'
@@ -39,11 +40,13 @@ function main() {
         ct.fill();
     }
 
-    drawLine = (ct, width, point1, point2) => {
+    colorRGB = ({red, green, blue}) => `rgb(${red}, ${green}, ${blue})`;
+
+    drawLine = (ct, rgbColor, width, point1, point2) => {
         ct.beginPath();
         const line = changeStroke(width);
         ct.lineCap = 'round';
-        ct.strokeStyle = 'rgb(80, 140, 200)';
+        ct.strokeStyle = colorRGB(rgbColor);
         ct.lineWidth = line.width;
         ct.moveTo(point1.x, point1.y);
         ct.lineTo(point2.x, point2.y);
@@ -61,7 +64,13 @@ function main() {
         if (mouseDown) {
             previousCursor = {...cursor} ;
             cursor = position(e.x, e.y);
-            drawLine(context, strokeWidth, previousCursor, cursor);
+            color = color > 1000 ? 0 : color + 1;
+            const rgbColor = {
+                red: color < 256 ? color : 255,
+                green: color + 255 > 511 ? color - 255 : 255,
+                blue: color + 510 > 766 ? color - 510 : 255
+            }
+            drawLine(context, rgbColor, strokeWidth, previousCursor, cursor);
         }
         
     }
