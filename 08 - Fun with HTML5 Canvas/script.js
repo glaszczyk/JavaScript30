@@ -5,7 +5,12 @@ function main() {
     let mouseDown = false;
     let cursor;
     let previousCursor;
-    let color = 0;
+    let color = {
+        red: 255,
+        green: 0,
+        blue: 0
+    };
+    let speed = 1;
     let strokeWidth = {
         width: 30,
         mode: 'decrease'
@@ -39,14 +44,32 @@ function main() {
         ct.arc(x, y, cradius.width, rad(0), rad(360));
         ct.fill();
     }
+    increaseChannel = (value, speed) => (value + speed >= 255) ? 255 : value + speed;
 
-    colorRGB = ({red, green, blue}) => `rgb(${red}, ${green}, ${blue})`;
+    decreaseChannel = (value, speed) => (value - speed <= 0) ? 0 : value - speed;
+    
+    colorRGB = ({red, green, blue}, speed) => {
+        if (red === 255 && green < 255 && blue === 0) { green = increaseChannel(green, speed)}
+        else if (red > 0 && green === 255 && blue === 0) { red = decreaseChannel(red, speed) }
+        else if (red === 0 && green === 255 && blue < 255) {blue = increaseChannel(blue, speed)}
+        else if (red === 0 && green > 0 && blue === 255) {green = decreaseChannel(green, speed)}
+        else if (red < 255 && green === 0 && blue === 255 ) {red = increaseChannel(red, speed)}
+        else if (red === 255 && green === 0 && blue > 0 ) {blue = decreaseChannel(blue, speed)};
+        color = { red, green, blue};
+        return `rgb(${red}, ${green}, ${blue})`;
+    }
+    
+    calculateSpeed = (point1, point2) => {
+        const s = Math.floor(Math.sqrt((point2.x - point1.x) ** 2 + (point2.y - point1.y) ** 2));
+        return (s>10) ? 10 : s;
+    }
 
     drawLine = (ct, rgbColor, width, point1, point2) => {
         ct.beginPath();
         const line = changeStroke(width);
         ct.lineCap = 'round';
-        ct.strokeStyle = colorRGB(rgbColor);
+        speed = calculateSpeed(point1, point2);
+        ct.strokeStyle = colorRGB(rgbColor, speed);
         ct.lineWidth = line.width;
         ct.moveTo(point1.x, point1.y);
         ct.lineTo(point2.x, point2.y);
@@ -64,13 +87,7 @@ function main() {
         if (mouseDown) {
             previousCursor = {...cursor} ;
             cursor = position(e.x, e.y);
-            color = color > 1000 ? 0 : color + 1;
-            const rgbColor = {
-                red: color < 256 ? color : 255,
-                green: color + 255 > 511 ? color - 255 : 255,
-                blue: color + 510 > 766 ? color - 510 : 255
-            }
-            drawLine(context, rgbColor, strokeWidth, previousCursor, cursor);
+            drawLine(context, color, strokeWidth, previousCursor, cursor);
         }
         
     }
