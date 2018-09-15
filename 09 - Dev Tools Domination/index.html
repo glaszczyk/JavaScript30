@@ -18,29 +18,34 @@
     }
 
     // Regular
-
+    console.log('Here is regular console.log');
     // Interpolated
-
+    console.log('I am kind of %s text!', '(.)(.)');
     // Styled
-
+    console.log('%c Styled text!', 'background: #369; color: #fff', 'next text');
     // warning!
-
+    console.warn('WARN! WARN!');
     // Error :|
-
+    console.error('You made it!');
     // Info
-
+    console.info('Here is some info message');
     // Testing
 
     // clearing
-
+    console.clear();
     // Viewing DOM Elements
-
+    
     // Grouping together
-
+    
     // counting
-
+    
     // timing
-
-  </script>
+    console.time('Set timeout');
+    setTimeout(() => {
+        console.log('And 3 seconds later…');
+        console.timeEnd('Set timeout');
+    }, 3000);
+    
+    </script>
 </body>
 </html>
